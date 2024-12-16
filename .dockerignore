@@ -1,8 +1,13 @@
 node_modules
 __pycache__
+*.pyc
+*.pyo
+*.pyd
+dist/
 build
 .env
 *.log
 *.md
 .git
 .gitignore
+.DS_Store
