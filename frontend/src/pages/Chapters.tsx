@@ -10,7 +10,7 @@ const ChaptersPage = () => {
   const {
     items: chapters,
     isLoaded,
-    currentPage,
+    currentaPage,
     totalPages,
     searchQuery,
     handleSearch,
