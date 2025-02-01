@@ -2,6 +2,7 @@
 
 from django.contrib import admin
 from django.utils.safestring import mark_safe
+from django.contrib import messages
 
 from apps.owasp.models.chapter import Chapter
 from apps.owasp.models.committee import Committee
@@ -33,13 +34,14 @@ class GenericEntityAdminMixin:
 
 
 class ChapterAdmin(admin.ModelAdmin, GenericEntityAdminMixin):
-    autocomplete_fields = ("owasp_repository",)
+    autocomplete_fields = ("owasp_repository","leaders",)
     list_display = (
         "name",
         "region",
         "custom_field_owasp_url",
         "custom_field_github_urls",
     )
+    filter_horizontal = ("suggested_leaders",)
     list_filter = (
         "is_active",
         "country",
@@ -49,8 +51,9 @@ class ChapterAdmin(admin.ModelAdmin, GenericEntityAdminMixin):
 
 
 class CommetteeAdmin(admin.ModelAdmin):
-    autocomplete_fields = ("owasp_repository",)
+    autocomplete_fields = ("owasp_repository","leaders",)
     search_fields = ("name",)
+    filter_horizontal = ("suggested_leaders",)
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -65,6 +68,7 @@ class ProjectAdmin(admin.ModelAdmin, GenericEntityAdminMixin):
         "owasp_repository",
         "owners",
         "repositories",
+        "leaders",
     )
     list_display = (
         "custom_field_name",
@@ -77,6 +81,8 @@ class ProjectAdmin(admin.ModelAdmin, GenericEntityAdminMixin):
         "custom_field_owasp_url",
         "custom_field_github_urls",
     )
+    actions = ['approve_suggested_leaders']
+    filter_horizontal = ("suggested_leaders",)
     list_filter = (
         "is_active",
         "has_active_repositories",
@@ -100,6 +106,23 @@ class ProjectAdmin(admin.ModelAdmin, GenericEntityAdminMixin):
 
     custom_field_name.short_description = "Name"
 
+    def approve_suggested_leaders(self, request, queryset):
+        for project in queryset:
+            # Get all suggested leaders
+            suggestions = project.suggested_leaders.all()
+            
+            # Add them to confirmed leaders
+            project.leaders.add(*suggestions)
+            
+            # Clear suggestions after approval
+            
+            self.message_user(
+                request,
+                f"Approved {suggestions.count()} leader suggestions for {project.name}",
+                messages.SUCCESS
+            )
+            
+    approve_suggested_leaders.short_description = "Approve all suggested leaders"
 
 admin.site.register(Chapter, ChapterAdmin)
 admin.site.register(Committee, CommetteeAdmin)

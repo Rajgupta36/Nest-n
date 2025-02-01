@@ -56,6 +56,18 @@ class ProjectIndexMixin(GenericEntityMixin):
         ]
 
     @property
+    def idx_leaders(self):
+        """Return leaders for indexing."""
+        # Get confirmed leaders from the M2M relationship
+        confirmed_leaders = [leaders.login for leaders in self.leaders.all()]
+        
+        # Get legacy leaders from leaders_raw
+        raw_leaders = [leader for leader in self.leaders_raw if not leader.startswith("@")]
+        
+        # Combine both and remove duplicates
+        return list(set(confirmed_leaders + raw_leaders))
+    
+    @property
     def idx_issues_count(self):
         """Return issues count for indexing."""
         return self.open_issues.count()

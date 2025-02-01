@@ -1,9 +1,8 @@
 """OWASP app project models."""
 
 from functools import lru_cache
-
+from fuzzywuzzy import fuzz
 from django.db import models
-
 from apps.common.index import IndexBase
 from apps.common.models import BulkSaveModel, TimestampedModel
 from apps.common.utils import get_absolute_url
@@ -119,7 +118,6 @@ class Project(
         verbose_name="Repositories",
         blank=True,
     )
-
     def __str__(self):
         """Project human readable representation."""
         return f"{self.name or self.key}"
@@ -128,7 +126,6 @@ class Project(
     def is_code_type(self):
         """Indicate whether project has CODE type."""
         return self.type == self.ProjectType.CODE
-
     @property
     def is_documentation_type(self):
         """Indicate whether project has DOCUMENTATION type."""
@@ -167,7 +164,7 @@ class Project(
             published_at__isnull=False,
             repository__in=self.repositories.all(),
         )
-
+    
     def deactivate(self):
         """Deactivate project."""
         self.is_active = False
@@ -218,7 +215,7 @@ class Project(
             self.generate_summary(prompt=prompt)
 
         super().save(*args, **kwargs)
-
+    
     @staticmethod
     @lru_cache
     def active_projects_count():
