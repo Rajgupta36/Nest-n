@@ -17,6 +17,11 @@ class User(AbstractUser):
             models.Index(fields=["username"]),
         ]
 
+    ROLE_CHOICES = (
+        ("contributor", "Contributor"),
+        ("mentor", "Mentor"),
+    )
+
     github_user = models.OneToOneField(
         "github.user",
         verbose_name="Github User",
@@ -24,6 +29,7 @@ class User(AbstractUser):
         null=True,
         on_delete=models.CASCADE,
     )
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, blank=True, null=True)
 
     def __str__(self) -> str:
         """Return a human-readable representation of the user.
