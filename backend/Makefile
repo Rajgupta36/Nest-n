@@ -2,6 +2,7 @@ include backend/apps/ai/Makefile
 include backend/apps/github/Makefile
 include backend/apps/owasp/Makefile
 include backend/apps/slack/Makefile
+include backend/apps/mentorship/Makefile
 
 clean-backend-dependencies:
 	@rm -rf backend/.cache
@@ -58,9 +59,6 @@ enrich-data: \
 	owasp-enrich-committees \
 	owasp-enrich-events \
 	owasp-enrich-projects
-
-filter-issues:
-	@CMD="python manage.py link_issues_by_label" $(MAKE) exec-backend-command
 
 generate-sitemap:
 	@CMD="python manage.py generate_sitemap" $(MAKE) exec-backend-command
