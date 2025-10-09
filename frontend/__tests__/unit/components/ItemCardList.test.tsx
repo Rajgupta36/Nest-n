@@ -148,6 +148,7 @@ const mockMilestone: Milestone = {
 }
 
 const mockPullRequest: PullRequest = {
+  id: 'pr-456',
   author: {
     ...mockUser,
     login: 'author3',

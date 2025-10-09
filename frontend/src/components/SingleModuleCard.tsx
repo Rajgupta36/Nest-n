@@ -8,6 +8,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { ExtendedSession } from 'types/auth'
 import type { Module } from 'types/mentorship'
 import { formatDate } from 'utils/dateFormatter'
+import { LabelList } from 'components/LabelList'
 import { getSimpleDuration } from 'components/ModuleCard'
 import TopContributorsList from 'components/TopContributorsList'
 
@@ -130,6 +131,16 @@ const SingleModuleCard: React.FC<SingleModuleCardProps> = ({
           </div>
         ))}
       </div>
+
+      {/* Labels */}
+      {module.labels && module.labels.length > 0 && (
+        <div className="pt-4">
+          <div className="mb-2">
+            <strong>Labels:</strong>
+          </div>
+          <LabelList labels={module.labels} maxVisible={8} />
+        </div>
+      )}
 
       {/* Mentors */}
       {module.mentors?.length > 0 && (

@@ -12,6 +12,7 @@ export const GET_MODULES_BY_PROGRAM = gql`
       endedAt
       projectId
       projectName
+      labels
       mentors {
         id
         login
@@ -30,6 +31,7 @@ export const GET_MODULE_BY_ID = gql`
       description
       tags
       domains
+      labels
       experienceLevel
       startedAt
       endedAt
@@ -63,6 +65,7 @@ export const GET_PROGRAM_ADMINS_AND_MODULES = gql`
       projectId
       projectName
       domains
+      labels
       experienceLevel
       startedAt
       endedAt
